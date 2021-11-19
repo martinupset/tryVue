@@ -7,6 +7,9 @@ export default class Products extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name')
+      table.string('description')
+      table.string('price')
+      table.integer('stock')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -10,6 +10,9 @@ export default class ProductsController {
     public async store({ request, response }: HttpContextContract) {
         const newProductSchema = schema.create({
             name: schema.string({trim: true}),
+            description: schema.string({trim: true}),
+            price: schema.string({trim: true}),
+            stock: schema.number()
         });
 
         const payload = await request.validate({ schema: newProductSchema })
