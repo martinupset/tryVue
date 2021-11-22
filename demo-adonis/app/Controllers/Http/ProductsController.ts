@@ -12,7 +12,7 @@ export default class ProductsController {
             name: schema.string({trim: true}),
             description: schema.string({trim: true}),
             price: schema.string({trim: true}),
-            stock: schema.number()
+            stock: schema.string()
         });
 
         const payload = await request.validate({ schema: newProductSchema })

@@ -17,7 +17,7 @@
           ></el-table-column>
         </el-table>
         <el-button class="el-icon-shopping-cart-full" slot="reference" size="mini"></el-button>
-        <el-button type="primary" round size="mini" @click.native="handleSubmit" style="float: right">确定购买</el-button>
+        <el-button type="primary" round size="mini" @click.native="handleBuy" style="float: right">确定购买</el-button>
       </el-popover>
     </el-header>
     <el-table :data="computedTableData">
@@ -82,29 +82,31 @@ export default {
   },
   methods: {
     handleAdd(value) {
-        const {name, price, stock} = value
+        const {id, name, price, stock} = value
         const exist = this.cartData.some(item => item.name === name)
         if(exist){
             this.cartData.forEach((item) => {
-                if(item.name === name && item.number < stock){
+                if(item.id === id && item.number < stock){
                     item.number ++
-                }else if(item.name === name && item.number === stock){
+                    item.stock --
+                }else if(item.id === id && item.number.toString() === stock){
                     console.log('out of stock')
                 }
             })
         }else{
-            this.cartData.push({name,price,number:1})
+            this.cartData.push({id,name,price,number:1,stock:stock-1})
         }
     },
 
     handleRemove(value) {
-        const {name} = value
-        const exist = this.cartData.some(item => item.name === name)
+        const {id} = value
+        const exist = this.cartData.some(item => item.id === id)
         if(exist) {
             this.cartData.forEach((item, index) => {
-                if(item.name === name && item.number > 1){
+                if(item.id === id && item.number > 1){
                     item.number --
-                }else if(item.name === name && item.number === 1){
+                    item.stock --
+                }else if(item.id === id && item.number === 1){
                     this.cartData.splice(index, 1)
                 }
             })
@@ -120,7 +122,10 @@ export default {
       });
       this.searchTableData = searchedProductArray;
     },
-  },
+
+    async handleBuy() {
+    }
+  }
 };
 </script>
 
