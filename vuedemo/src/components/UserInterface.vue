@@ -105,7 +105,7 @@ export default {
             this.cartData.forEach((item, index) => {
                 if(item.id === id && item.number > 1){
                     item.number --
-                    item.stock --
+                    item.stock ++
                 }else if(item.id === id && item.number === 1){
                     this.cartData.splice(index, 1)
                 }
@@ -124,6 +124,10 @@ export default {
     },
 
     async handleBuy() {
+        const putUrl = baseUrl + '/put'
+        await axios.put(putUrl, this.cartData)
+        this.cartData = []
+        location.reload()
     }
   }
 };

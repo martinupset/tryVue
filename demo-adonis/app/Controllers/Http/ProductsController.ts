@@ -30,13 +30,18 @@ export default class ProductsController {
     }
 
     public async update({params, request}: HttpContextContract) {
-        const body = request.body()
+        const cartData = request.body()
+        cartData.forEach(async (item) => {
+            const product = await Product.findOrFail(item.id)
+            product.stock = item.stock
+            product.save()
+        })
 
-        const product = await Product.findOrFail(params.id)
+        // const product = await Product.findOrFail(request.id)
 
-        product.name = body.name
+        // product.name = body.name
 
-        return product.save()
+        // return product.save()
     }
 
     public async destroy({params}: HttpContextContract) {
