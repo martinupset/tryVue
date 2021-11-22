@@ -35,8 +35,8 @@
       </el-dropdown>
     </el-header>
     <el-table :data="tableData">
-      <el-table-column prop="name" label="商品名称" width="140"> </el-table-column>
-      <el-table-column prop="description" label="商品描述" width="120"> </el-table-column>
+      <el-table-column prop="name" label="商品名称"> </el-table-column>
+      <el-table-column prop="description" label="商品描述"> </el-table-column>
       <el-table-column prop="price" label="商品价格"> </el-table-column>
       <el-table-column prop="stock" label="库存"> </el-table-column>
     </el-table>
@@ -75,7 +75,7 @@ export default {
           'price': this.price,
           'stock': this.stock
         }
-        const addProductItem = await axios.post(baseUrl, productData)
+        await axios.post(baseUrl, productData)
         this.tableData.push(productData)
         this.name = ''
         this.description = ''

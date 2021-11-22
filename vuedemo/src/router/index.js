@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import UserInterface from '@/components/UserInterface'
 import Mytable from '@/components/MyTable'
 
 Vue.use(Router)
@@ -9,8 +9,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'UserInterface',
+      component: UserInterface
     },
     {
       path: '/table',
