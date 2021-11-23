@@ -3,21 +3,23 @@
     <el-header style="text-align: right; font-size: 12px">
       <el-popover placement="right" trigger="click">
         <el-table :data="cartData">
-          <el-table-column
-            property="name"
-            label="商品名称"
-          ></el-table-column>
-          <el-table-column
-            property="price"
-            label="商品价格"
-          ></el-table-column>
-          <el-table-column
-            property="number"
-            label="数量"
-          ></el-table-column>
+          <el-table-column property="name" label="商品名称"></el-table-column>
+          <el-table-column property="price" label="商品价格"></el-table-column>
+          <el-table-column property="number" label="数量"></el-table-column>
         </el-table>
-        <el-button class="el-icon-shopping-cart-full" slot="reference" size="mini"></el-button>
-        <el-button type="primary" round size="mini" @click.native="handleBuy" style="float: right">确定购买</el-button>
+        <el-button
+          class="el-icon-shopping-cart-full"
+          slot="reference"
+          size="mini"
+        ></el-button>
+        <el-button
+          type="primary"
+          round
+          size="mini"
+          @click.native="handleBuy"
+          style="float: right"
+          >确定购买</el-button
+        >
       </el-popover>
     </el-header>
     <el-table :data="computedTableData">
@@ -38,10 +40,7 @@
           <el-button size="mini" @click="handleAdd(scope.row)"
             >加入购物车</el-button
           >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleRemove(scope.row)"
+          <el-button size="mini" type="danger" @click="handleRemove(scope.row)"
             >移出购物车</el-button
           >
         </template>
@@ -64,7 +63,7 @@ export default {
       num: 1,
       search: "",
       searchTableData: null,
-      cartData: []
+      cartData: [],
     };
   },
   computed: {
@@ -73,46 +72,45 @@ export default {
     },
   },
   async mounted() {
-    try {
-      const myData = await axios.get(baseUrl);
-      this.tableData = myData.data;
-    } catch (e) {
-      console.log(e);
-    }
+    await this.fetchTableData()
   },
   methods: {
     handleAdd(value) {
-        const {id, name, price, stock} = value
-        const exist = this.cartData.some(item => item.name === name)
-        if(exist){
-            this.cartData.forEach((item) => {
-                if(item.id === id && item.number < stock){
-                    item.number ++
-                    item.stock --
-                }else if(item.id === id && item.number.toString() === stock){
-                    console.log('out of stock')
-                }
-            })
-        }else{
-            this.cartData.push({id,name,price,number:1,stock:stock-1})
+      const { id, name, price, stock } = value;
+      const exist = this.cartData.some((item) => item.name === name);
+      if (exist) {
+        this.cartData.forEach((item) => {
+          if (item.id === id && item.number < stock) {
+            item.number++;
+            item.stock--;
+          } else if (item.id === id && item.number.toString() === stock) {
+            console.log("out of stock");
+          }
+        });
+      } else {
+        if (stock !== "sell out") {
+          this.cartData.push({ id, name, price, number: 1, stock: stock - 1 });
+        } else {
+          console.log("out of stock");
         }
+      }
     },
 
     handleRemove(value) {
-        const {id} = value
-        const exist = this.cartData.some(item => item.id === id)
-        if(exist) {
-            this.cartData.forEach((item, index) => {
-                if(item.id === id && item.number > 1){
-                    item.number --
-                    item.stock ++
-                }else if(item.id === id && item.number === 1){
-                    this.cartData.splice(index, 1)
-                }
-            })
-        }else {
-            console.log('do not find this item')
-        }
+      const { id } = value;
+      const exist = this.cartData.some((item) => item.id === id);
+      if (exist) {
+        this.cartData.forEach((item, index) => {
+          if (item.id === id && item.number > 1) {
+            item.number--;
+            item.stock++;
+          } else if (item.id === id && item.number === 1) {
+            this.cartData.splice(index, 1);
+          }
+        });
+      } else {
+        console.log("do not find this item");
+      }
     },
 
     handleInputChange(searchValue) {
@@ -124,12 +122,26 @@ export default {
     },
 
     async handleBuy() {
-        const putUrl = baseUrl + '/put'
-        await axios.put(putUrl, this.cartData)
-        this.cartData = []
-        location.reload()
-    }
-  }
+      const storeUrl = "http://127.0.0.1:3333/store";
+      const storeSystem = await axios.post(storeUrl, this.cartData);
+      this.cartData = [];
+      console.log(storeSystem.data);
+      const orderNumber = (parseInt(Math.random() * 10) + 1).toString();
+      const flowUrl = "http://127.0.0.1:3333/flow/" + orderNumber;
+      const flowSystem = await axios.get(flowUrl);
+      await this.fetchTableData()
+      console.log(flowSystem.data);
+    },
+
+    async fetchTableData() {
+      try {
+        const myData = await axios.get(baseUrl);
+        this.tableData = myData.data;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  },
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-header style="text-align: right; font-size: 12px">
-      <el-dropdown>
+      <el-dropdown trigger="click">
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
           <el-popover

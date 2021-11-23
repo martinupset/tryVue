@@ -1,28 +1,32 @@
-/*
-|--------------------------------------------------------------------------
-| Routes
-|--------------------------------------------------------------------------
-|
-| This file is dedicated for defining HTTP routes. A single file is enough
-| for majority of projects, however you can define routes in different
-| files and just make sure to import them inside this file. For example
-|
-| Define routes in following two files
-| ├── start/routes/cart.ts
-| ├── start/routes/customer.ts
-|
-| and then import them inside `start/routes.ts` as follows
-|
-| import './routes/cart'
-| import './routes/customer'
-|
-*/
-
 import Route from '@ioc:Adonis/Core/Route'
+import Product from 'App/Models/Product'
+import {writeLogs} from 'App/Logs/fileSystem'
 
-Route.get('/posts/:postId', async ({ params, request, response }) => {
-  response.status(400)
-  return 'I am string' + params.postId
+Route.post('/store', async ({ request, response }) => {
+        let result = '已发货'
+        const cartData = request.body()
+        cartData.forEach(async (item) => {
+            const product = await Product.findOrFail(item.id)
+            if(parseInt(item.stock) === 0){
+              product.stock = 'sell out'
+            }else{
+              product.stock = item.stock
+            }
+            await product.save()
+        })
+        cartData.forEach((item) => {
+          result = result + item.name + item.number + '件' + ';'
+        })
+        const stockTime = new Date().toLocaleDateString()
+        const appendFileData = stockTime + ':' + result + "\n"
+        writeLogs(appendFileData)
+
+        return result
+})
+
+Route.get('/flow/:flowId', async ({ params, request, response }) => {
+  response.status(200)
+  return params.flowId + '号订单已准备就绪'
 })
 
 //GET /products
