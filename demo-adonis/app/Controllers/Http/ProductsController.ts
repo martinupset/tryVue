@@ -25,17 +25,17 @@ export default class ProductsController {
         return product
     }
 
-    public async show({params}: HttpContextContract) {
-        return Product.findOrFail(params.id)
-    }
+    // public async show({params}: HttpContextContract) {
+    //     return Product.findOrFail(params.id)
+    // }
 
-    public async update({params, request}: HttpContextContract) {
-        const cartData = request.body()
-        cartData.forEach(async (item) => {
-            const product = await Product.findOrFail(item.id)
-            product.stock = item.stock
-            product.save()
-        })
+    // public async update({params, request}: HttpContextContract) {
+    //     const cartData = request.body()
+    //     cartData.forEach(async (item) => {
+    //         const product = await Product.findOrFail(item.id)
+    //         product.stock = item.stock
+    //         product.save()
+    //     })
 
         // const product = await Product.findOrFail(request.id)
 
@@ -44,11 +44,11 @@ export default class ProductsController {
         // return product.save()
     }
 
-    public async destroy({params}: HttpContextContract) {
-        const product = await Product.findOrFail(params.id)
+    // public async destroy({params}: HttpContextContract) {
+    //     const product = await Product.findOrFail(params.id)
 
-        await product.delete()
+    //     await product.delete()
 
-        return product
-    }
+    //     return product
+    // }
 }
