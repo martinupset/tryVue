@@ -1,64 +1,177 @@
 <template>
-<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="活动名称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动区域" prop="password">
-    <el-input v-model="ruleForm.password"></el-input>
-  </el-form-item>
-</el-form>
+  <div class="login">
+    <el-card>
+      <h2>Login</h2>
+      <el-form
+        class="login-form"
+        :model="model"
+        :rules="rules"
+        ref="form"
+        @submit.native.prevent="login"
+      >
+        <el-form-item prop="username">
+          <el-input v-model="model.username" placeholder="Username" prefix-icon="el-icon-user"></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            v-model="model.password"
+            placeholder="Password"
+            type="password"
+            prefix-icon="el-icon-key"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            :loading="loading"
+            class="login-button"
+            type="primary"
+            native-type="submit"
+            block
+          >Login</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script>
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
-
 export default {
-//import引入的组件需要注入到对象中才能使用
-components: {},
-data() {
+  name: "login",
+  data() {
     return {
-        ruleForm: {
-            name: '',
-            password: ''
-        },
-        rules: {
-            name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-            ],
-            password: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-            ]
-        }
+      validCredentials: {
+        username: "lightscope",
+        password: "lightscope"
+      },
+      model: {
+        username: "",
+        password: ""
+      },
+      loading: false,
+      rules: {
+        username: [
+          {
+            required: true,
+            message: "Username is required",
+            trigger: "blur"
+          },
+          {
+            min: 4,
+            message: "Username length should be at least 5 characters",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          { required: true, message: "Password is required", trigger: "blur" },
+          {
+            min: 5,
+            message: "Password length should be at least 5 characters",
+            trigger: "blur"
+          }
+        ]
+      }
     };
-},
-//监听属性 类似于data概念
-computed: {},
-//监控data中的数据变化
-watch: {},
-//方法集合
-methods: {
-    
-
-},
-//生命周期 - 创建完成（可以访问当前this实例）
-created() {
-
-},
-//生命周期 - 挂载完成（可以访问DOM元素）
-mounted() {
-
-},
-beforeCreate() {}, //生命周期 - 创建之前
-beforeMount() {}, //生命周期 - 挂载之前
-beforeUpdate() {}, //生命周期 - 更新之前
-updated() {}, //生命周期 - 更新之后
-beforeDestroy() {}, //生命周期 - 销毁之前
-destroyed() {}, //生命周期 - 销毁完成
-activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-}
+  },
+  methods: {
+    simulateLogin() {
+      return new Promise(resolve => {
+        setTimeout(resolve, 800);
+      });
+    },
+    async login() {
+      //为了表单提交以后不刷新页面
+      let valid = await this.$refs.form.validate();
+      if (!valid) {
+        return;
+      }
+      this.loading = true;
+      await this.simulateLogin();
+      this.loading = false;
+      if (
+        this.model.username === this.validCredentials.username &&
+        this.model.password === this.validCredentials.password
+      ) {
+        this.$message.success("Login successfull");
+      } else {
+        this.$message.error("Username or password is invalid");
+      }
+    }
+  }
+};
 </script>
-<style scoped>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss">
+.login {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-button {
+  width: 100%;
+  margin-top: 40px;
+}
+.login-form {
+  width: 290px;
+}
+.forgot-password {
+  margin-top: 10px;
+}
+</style>
+<style lang="scss">
+$teal: rgb(0, 124, 137);
+.el-button--primary {
+  background: $teal;
+  border-color: $teal;
+
+  &:hover,
+  &.active,
+  &:focus {
+    background: lighten($teal, 7);
+    border-color: lighten($teal, 7);
+  }
+}
+.login .el-input__inner:hover {
+  border-color: $teal;
+}
+.login .el-input__prefix {
+  background: rgb(238, 237, 234);
+  left: 0;
+  height: calc(100% - 2px);
+  left: 1px;
+  top: 1px;
+  border-radius: 3px;
+  .el-input__icon {
+    width: 30px;
+  }
+}
+.login .el-input input {
+  padding-left: 35px;
+}
+.login .el-card {
+  padding-top: 0;
+  padding-bottom: 30px;
+}
+h2 {
+  font-family: "Open Sans";
+  letter-spacing: 1px;
+  font-family: Roboto, sans-serif;
+  padding-bottom: 20px;
+}
+a {
+  color: $teal;
+  text-decoration: none;
+  &:hover,
+  &:active,
+  &:focus {
+    color: lighten($teal, 7);
+  }
+}
+.login .el-card {
+  width: 340px;
+  display: flex;
+  justify-content: center;
+}
 </style>
