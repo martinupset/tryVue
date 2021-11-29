@@ -42,7 +42,7 @@ export default class ProductsController {
         // product.name = body.name
 
         // return product.save()
-    }
+    // }
 
     // public async destroy({params}: HttpContextContract) {
     //     const product = await Product.findOrFail(params.id)

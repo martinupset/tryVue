@@ -30,4 +30,12 @@ Route.get('/flow/:flowId', async ({ params, request, response }) => {
 })
 
 //GET /products
-Route.resource('/products', 'ProductsController').apiOnly()
+Route.group(() => {
+  Route.resource('/products', 'ProductsController').apiOnly()
+}).middleware('auth')
+
+Route.resource('/users', 'UsersController').apiOnly()
+
+Route.post('/register', 'AuthController.register')
+
+Route.post('/login', 'AuthController.login')

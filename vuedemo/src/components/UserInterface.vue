@@ -51,7 +51,9 @@
 
 <script>
 import axios from "axios";
+const {getCookie} = require('../handleCookie')
 const baseUrl = "http://127.0.0.1:3333/products";
+const httpHeader = { headers: {'Authorization': 'Bearer ' + getCookie('token')} }
 export default {
   name: "UserInterface",
   props: {
@@ -135,7 +137,7 @@ export default {
 
     async fetchTableData() {
       try {
-        const myData = await axios.get(baseUrl);
+        const myData = await axios.get(baseUrl, httpHeader);
         this.tableData = myData.data;
       } catch (e) {
         console.log(e);

@@ -9,8 +9,8 @@
         ref="form"
         @submit.native.prevent="login"
       >
-        <el-form-item prop="username">
-          <el-input v-model="model.username" placeholder="Username" prefix-icon="el-icon-user"></el-input>
+        <el-form-item prop="email">
+          <el-input v-model="model.email" placeholder="Email" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
@@ -35,36 +35,35 @@
 </template>
 
 <script>
+import axios from "axios";
+const baseUrl = "http://127.0.0.1:3333/login";
+const {setCookie} = require('../handleCookie')
 export default {
   name: "login",
   data() {
     return {
-      validCredentials: {
-        username: "lightscope",
-        password: "lightscope"
-      },
       model: {
-        username: "",
+        email: "",
         password: ""
       },
       loading: false,
       rules: {
-        username: [
+        email: [
           {
             required: true,
-            message: "Username is required",
+            message: "email is required",
             trigger: "blur"
           },
           {
             min: 4,
-            message: "Username length should be at least 5 characters",
+            message: "Email length should be at least 5 characters",
             trigger: "blur"
           }
         ],
         password: [
           { required: true, message: "Password is required", trigger: "blur" },
           {
-            min: 5,
+            min: 3,
             message: "Password length should be at least 5 characters",
             trigger: "blur"
           }
@@ -73,11 +72,6 @@ export default {
     };
   },
   methods: {
-    simulateLogin() {
-      return new Promise(resolve => {
-        setTimeout(resolve, 800);
-      });
-    },
     async login() {
       //为了表单提交以后不刷新页面
       let valid = await this.$refs.form.validate();
@@ -85,13 +79,13 @@ export default {
         return;
       }
       this.loading = true;
-      await this.simulateLogin();
+      const loginResponse = await axios.post(baseUrl, this.model)
       this.loading = false;
-      if (
-        this.model.username === this.validCredentials.username &&
-        this.model.password === this.validCredentials.password
-      ) {
+      console.log(loginResponse)
+      if (loginResponse.status === 200) {
         this.$message.success("Login successfull");
+        setCookie('token', loginResponse.data.token, 15)
+        this.$router.push('/mainPage')
       } else {
         this.$message.error("Username or password is invalid");
       }
