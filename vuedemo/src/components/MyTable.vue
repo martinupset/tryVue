@@ -47,7 +47,6 @@
   import axios from 'axios'
   const baseUrl = 'http://127.0.0.1:3333/products'
   const {getCookie} = require('../handleCookie')
-  const httpHeader = { headers: {'Authorization': 'Bearer ' + getCookie('token')} }
 
 export default {
   components: {},
@@ -58,10 +57,15 @@ export default {
         description: '',
         price: '',
         stock: '',
+        token: getCookie('token')
       }
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    httpHeader(){ 
+      return { headers: {'Authorization': 'Bearer ' + getCookie('token')} }
+      }
+  },
   //监控data中的数据变化
   watch: {},
   //方法集合
@@ -90,7 +94,7 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   async mounted() {
     try {
-      const myData = await axios.get(baseUrl, httpHeader)
+      const myData = await axios.get(baseUrl, this.httpHeader)
       this.tableData = myData.data
     } catch(e) {
       console.log(e)

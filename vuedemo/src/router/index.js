@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import UserInterface from '@/components/UserInterface'
-import Mytable from '@/components/MyTable'
+const UserInterface = () => import('@/components/UserInterface')
+const Mytable = () => import('@/components/MyTable')
 import MainPage from '@/components/TableContainer'
 import Login from '@/components/Login'
 
@@ -30,6 +30,10 @@ export default new Router({
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/',
+    redirect: '/login'
   }
   ]
 })

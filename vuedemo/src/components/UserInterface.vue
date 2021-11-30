@@ -53,7 +53,7 @@
 import axios from "axios";
 const {getCookie} = require('../handleCookie')
 const baseUrl = "http://127.0.0.1:3333/products";
-const httpHeader = { headers: {'Authorization': 'Bearer ' + getCookie('token')} }
+
 export default {
   name: "UserInterface",
   props: {
@@ -66,12 +66,17 @@ export default {
       search: "",
       searchTableData: null,
       cartData: [],
+      token: getCookie('token')
     };
   },
   computed: {
     computedTableData() {
       return this.searchTableData || this.tableData;
     },
+
+    httpHeader() {
+      return { headers: {'Authorization': 'Bearer ' + this.token} }
+    }
   },
   async mounted() {
     await this.fetchTableData()
@@ -137,7 +142,7 @@ export default {
 
     async fetchTableData() {
       try {
-        const myData = await axios.get(baseUrl, httpHeader);
+        const myData = await axios.get(baseUrl, this.httpHeader);
         this.tableData = myData.data;
       } catch (e) {
         console.log(e);

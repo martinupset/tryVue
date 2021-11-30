@@ -10,9 +10,9 @@ const setCookie = (name, value, min) => {
   };
 
   const getCookie = (name) => {
-    var arr;
-    var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-    if (arr = document.cookie.match(reg))
+    let reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    let arr = document.cookie.match(reg)
+    if (arr)
       return arr[2];
     else
       return null;

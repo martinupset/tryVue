@@ -81,10 +81,9 @@ export default {
       this.loading = true;
       const loginResponse = await axios.post(baseUrl, this.model)
       this.loading = false;
-      console.log(loginResponse)
       if (loginResponse.status === 200) {
         this.$message.success("Login successfull");
-        setCookie('token', loginResponse.data.token, 15)
+        setCookie('token', loginResponse.data.token, 150)
         this.$router.push('/mainPage')
       } else {
         this.$message.error("Username or password is invalid");
