@@ -37,11 +37,11 @@ export default class ProductsController {
     //         product.save()
     //     })
 
-        // const product = await Product.findOrFail(request.id)
+    //     const product = await Product.findOrFail(request.id)
 
-        // product.name = body.name
+    //     product.name = body.name
 
-        // return product.save()
+    //     return product.save()
     // }
 
     // public async destroy({params}: HttpContextContract) {

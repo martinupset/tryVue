@@ -10,6 +10,9 @@ export default class Products extends BaseSchema {
       table.string('description')
       table.string('price')
       table.string('stock')
+      table.boolean('locked')
+      table.integer('lockedId')
+
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
