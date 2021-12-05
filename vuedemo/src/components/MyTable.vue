@@ -62,7 +62,7 @@ export default {
   },
   //监听属性 类似于data概念
   computed: {
-    httpHeader(){ 
+    httpHeader(){
       return { headers: {'Authorization': 'Bearer ' + getCookie('token')} }
       }
   },
@@ -78,7 +78,7 @@ export default {
           'price': this.price,
           'stock': this.stock
         }
-        await axios.post(baseUrl, productData, httpHeader)
+        await axios.post(baseUrl, productData, this.httpHeader)
         this.tableData.push(productData)
         this.name = ''
         this.description = ''

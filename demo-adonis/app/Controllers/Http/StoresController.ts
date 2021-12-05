@@ -2,7 +2,6 @@
 import Product from 'App/Models/Product'
 import {writeLogs} from 'App/Logs/fileSystem'
 
-
 export default class StoresController {
     async sell({request, response}){
         let result = '已发货'
