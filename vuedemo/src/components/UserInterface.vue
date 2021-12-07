@@ -131,6 +131,8 @@ export default {
     async handleBuy() {
       const storeUrl = "http://127.0.0.1:3333/store";
       const storeSystem = await axios.post(storeUrl, this.cartData);
+      const orderUrl = "http://127.0.0.1:3332/order"
+      await axios.post(orderUrl, this.cartData)
       this.cartData = [];
       console.log(storeSystem.data);
       const orderNumber = (parseInt(Math.random() * 10) + 1).toString();

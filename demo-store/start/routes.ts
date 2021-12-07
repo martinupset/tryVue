@@ -20,7 +20,4 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/flow/:flowId', async ({ params, request, response }) => {
-  response.status(200)
-  return params.flowId + '号订单已准备就绪'
-})
+Route.post('/order', 'OrdersController.index')

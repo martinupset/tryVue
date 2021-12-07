@@ -7,7 +7,7 @@ let LOCK = 'lock'
 export const sendLock = (obj) => {
   channel().then(function(ch) {
     return ch.assertQueue(LOCK).then(function(ok) {
-      return ch.sendToQueue(LOCK, Buffer.from('proId|userId'));
+      return ch.sendToQueue(LOCK, Buffer.from(`${obj.productId}|${obj.number}`));
     });
   }).catch(console.warn);
 }
