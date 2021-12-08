@@ -51,6 +51,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from 'vuex';
 const {getCookie} = require('../handleCookie')
 const baseUrl = "http://127.0.0.1:3333/products";
 
@@ -76,7 +77,9 @@ export default {
 
     httpHeader() {
       return { headers: {'Authorization': 'Bearer ' + this.token} }
-    }
+    },
+
+    ...mapGetters(['getUserId'])
   },
   async mounted() {
     await this.fetchTableData()
@@ -129,10 +132,11 @@ export default {
     },
 
     async handleBuy() {
-      const storeUrl = "http://127.0.0.1:3333/store";
-      const storeSystem = await axios.post(storeUrl, this.cartData);
+      const postData = {cartData: this.cartData, userId: this.getUserId}
       const orderUrl = "http://127.0.0.1:3332/order"
-      await axios.post(orderUrl, this.cartData)
+      await axios.post(orderUrl, postData)
+      const storeUrl = "http://127.0.0.1:3333/store";
+      const storeSystem = await axios.post(storeUrl, postData);
       this.cartData = [];
       console.log(storeSystem.data);
       const orderNumber = (parseInt(Math.random() * 10) + 1).toString();

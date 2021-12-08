@@ -11,7 +11,7 @@ export default class Products extends BaseSchema {
       table.string('price')
       table.string('stock')
       table.boolean('locked')
-      table.integer('lockedId')
+      table.string('locked_id')
 
 
       /**

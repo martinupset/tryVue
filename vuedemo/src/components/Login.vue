@@ -36,6 +36,7 @@
 
 <script>
 import axios from "axios";
+import { mapMutations } from 'vuex'
 const baseUrl = "http://127.0.0.1:3333/login";
 const {setCookie} = require('../handleCookie')
 export default {
@@ -72,6 +73,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['setUserId']),
     async login() {
       //为了表单提交以后不刷新页面
       let valid = await this.$refs.form.validate();
@@ -82,6 +84,7 @@ export default {
       const loginResponse = await axios.post(baseUrl, this.model)
       this.loading = false;
       if (loginResponse.status === 200) {
+        this.setUserId(loginResponse.data.id)
         this.$message.success("Login successfull");
         setCookie('token', loginResponse.data.token, 150)
         this.$router.push('/mainPage')

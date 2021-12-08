@@ -21,7 +21,7 @@ export default class Product extends BaseModel {
   public locked: boolean
 
   @column()
-  public lockedId: number
+  public lockedId: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

@@ -6,10 +6,10 @@ export default class Order extends BaseModel {
   public id: number
 
   @column()
-  public orderId: string
+  public productId: string
 
   @column()
-  public productId: string
+  public userId: string
 
   @column()
   public number: number

@@ -5,9 +5,8 @@ import { receiveLock } from 'App/rabbitMq/lock'
 
 export default class StoresController {
   async sell({ request, response }) {
-    console.log(request.body())
     let result = '已发货'
-    const cartData = request.body()
+    const {cartData} = request.body()
     await receiveLock()
     cartData.forEach((item) => {
       result = result + item.name + item.number + '件' + ';'

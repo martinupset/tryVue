@@ -1,21 +1,24 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Order from 'App/Models/Order'
-import { writeLogs } from 'App/Logs/fileSystem'
+
 import Database from '@ioc:Adonis/Lucid/Database'
 import { sendLock } from 'App/rabbitMq/lock'
 
 
 export default class OrdersController {
   async index({ request, response }) {
-    console.log('miao')
-    const cartData = request.body()
-    console.log(cartData)
+    const {cartData, userId} = request.body()
+    console.log(cartData, userId)
       cartData.forEach(async (item) => {
+        await Database.transaction(async (trx) => {
         const order = new Order()
         order.productId = item.id
         order.number = item.number
-        await sendLock(item)
+        order.userId = userId
+        await sendLock(item, userId)
+        order.useTransaction(trx)
         await order.save()
+        })   
       })
     // cartData.forEach(async (item) => {
     // const product = await Product.findOrFail(item.id)

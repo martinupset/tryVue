@@ -25,7 +25,12 @@ export default class AuthController {
         const email = request.input('email')
         const password = request.input('password')
         const token = await auth.attempt(email, password)
+        let id
+        if(token){
+            const user = await User.findByOrFail('email', email)
+            id = user.id
+        }
         response.status(200)
-        return token.toJSON()
+        return {...token.toJSON(), id}
     }
 }

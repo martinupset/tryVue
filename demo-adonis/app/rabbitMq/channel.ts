@@ -1,5 +1,3 @@
-var q = 'tasks';
-
 const open = require('amqplib').connect('amqp://localhost');
 // Publisher
 
